@@ -1,25 +1,13 @@
-# Chief of Staff — Scheduling Assistant
+# Chief of Staff — Scheduling Assistant (PoC)
 
-**Manage your calendar in plain English.** Type a command — *"Schedule a budget
-review with Anna on Friday at 2pm"* — and it creates, reschedules, cancels, and
-reasons about meetings on a live calendar, flagging conflicts, holidays, buffer
-time, and time-zone differences as it goes.
+A natural-language scheduling assistant. Type plain-English commands and the
+assistant creates / reschedules / cancels meetings, finds free slots, manages
+participants, books conference rooms, plans focus time, prioritizes meetings,
+and flags conflicts, holidays, buffer time, and cross-time-zone hours — all
+rendered in a chat + live calendar UI, backed by **Postgres**, with an optional
+**Microsoft Outlook (Graph)** bridge.
 
-### ▶ Live demo: **https://cos-scheduler.onrender.com**
-*(Free hosting — the first load may take ~30–60s to wake up, then it's instant.)*
-
-![Chief of Staff Scheduling Assistant](docs/screenshot.png)
-
-**Try these in the chat** (or tap them in the sidebar):
-- `Schedule 'Budget Review' with Anna Nowak on Jun 22 at 14:00, agenda: finalize Q3 numbers`
-- `Find a 60-minute window when Kasia, Tomek and I are free`
-- `Move my meeting with Paweł from Friday to Monday at 11:00`
-- `Plan 6 hours of focus time this week`
-- `Which meetings can I cut?` · `Prep me for the Finance Review`
-
-A natural-language scheduling assistant: chat + live calendar UI, a calendar
-reasoning engine, **PostgreSQL** persistence, and an optional **Microsoft Outlook
-(Graph)** bridge.
+> **Standalone project.** This lives outside `ram-app` and shares no code with it.
 
 ---
 
