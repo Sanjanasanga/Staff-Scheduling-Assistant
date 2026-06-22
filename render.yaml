@@ -12,7 +12,7 @@ services:
     plan: free
     # Install backend + frontend deps (incl. dev deps needed to build), build the
     # frontend into dist, which the backend then serves.
-    buildCommand: cd "Scheduling app backend" && npm install --include=dev && cd "../Scheduling app frontend" && npm install --include=dev && npm run build
+    buildCommand: cd "Scheduling app frontend" && npm install --include=dev && npm run build && cd "../Scheduling app backend" && npm install --include=dev && rm -rf public && cp -r "../Scheduling app frontend/dist" public
     startCommand: cd "Scheduling app backend" && npm run start
     envVars:
       - key: DATABASE_URL

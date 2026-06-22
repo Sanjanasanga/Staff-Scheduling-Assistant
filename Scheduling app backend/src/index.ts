@@ -2,6 +2,7 @@ import express, { type NextFunction, type Request, type Response } from "express
 import cors from "cors";
 import path from "node:path";
 import { existsSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 import { parseCommand, type Intent } from "./nlp.js";
 import { handle, type AssistantResponse } from "./assistant.js";
 import { events, holidays, rooms, users } from "./store.js";
@@ -176,8 +177,19 @@ app.post("/api/command", async (req, res, next) => {
 // Single-service deploy: serve the built frontend from the backend so the whole
 // app lives at one URL. In local dev the frontend runs on Vite and `dist` does
 // not exist, so this block is skipped.
-const distDir = process.env.FRONTEND_DIST || path.resolve(process.cwd(), "..", "Scheduling app frontend", "dist");
-if (existsSync(distDir)) {
+// Resolve the build dir relative to THIS module (cwd-independent). On deploy the
+// build copies the frontend into ./public next to the backend; locally it's the
+// sibling frontend's dist.
+const here = path.dirname(fileURLToPath(import.meta.url)); // .../Scheduling app backend/src
+const distDir = [
+  process.env.FRONTEND_DIST,
+  path.resolve(here, "..", "public"),
+  path.resolve(here, "..", "..", "Scheduling app frontend", "dist"),
+]
+  .filter((d): d is string => Boolean(d))
+  .find((d) => existsSync(d));
+
+if (distDir) {
   app.use(express.static(distDir));
   // SPA fallback: any non-API GET returns index.html.
   app.get("*", (req, res) => {
@@ -188,6 +200,8 @@ if (existsSync(distDir)) {
     res.sendFile(path.join(distDir, "index.html"));
   });
   console.log(`[cos-scheduler] serving frontend from ${distDir}`);
+} else {
+  console.log("[cos-scheduler] no frontend build found — serving API only");
 }
 
 app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
